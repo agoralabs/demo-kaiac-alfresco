@@ -21,13 +21,6 @@
         <share.image.tag>${dependency.alfresco-community-share.version}</share.image.tag>
     </properties>
 
-    <scm>
-        <connection>scm:git:https://github.com/Alfresco/acs-community-packaging.git</connection>
-        <developerConnection>scm:git:https://github.com/Alfresco/acs-community-packaging.git</developerConnection>
-        <url>https://github.com/Alfresco/acs-community-packaging</url>
-        <tag>HEAD</tag>
-    </scm>
-
     <distributionManagement>
         <repository>
             <id>alfresco-internal</id>
