@@ -1,0 +1,217 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>alfresco-content-services-community-distribution</artifactId>
+    <name>Alfresco Content Services Community Distribution zip</name>
+    <packaging>jar</packaging>
+
+    <parent>
+        <groupId>org.alfresco</groupId>
+        <artifactId>acs-community-packaging</artifactId>
+        <version>23.1.0-A28-SNAPSHOT</version>
+    </parent>
+
+    <dependencies>
+        <!-- WAR files -->
+        <dependency>
+            <groupId>org.alfresco</groupId>
+            <artifactId>content-services-community</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.alfresco</groupId>
+            <artifactId>alfresco-data-model</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.alfresco</groupId>
+            <artifactId>alfresco-repository</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.alfresco</groupId>
+            <artifactId>alfresco-server-root</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.alfresco</groupId>
+            <artifactId>alfresco-mmt</artifactId>
+        </dependency>
+        <!-- 3rd party libs -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${dependency.postgresql.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- SHARE Distribution -->
+        <dependency>
+            <groupId>org.alfresco</groupId>
+            <artifactId>alfresco-content-services-share-distribution</artifactId>
+            <type>zip</type>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}-${project.version}</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
+        <plugins>
+
+            <!-- Reconfigure default-resource to overwrite files, so ACS resources overwrite
+                 enterprise resources. The default is false. -->
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-resources</id>
+                        <!-- runs in process-resources phase. -->
+                        <configuration>
+                            <overwrite>true</overwrite>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Copy the enterprise's deployment resources in the generate-resources phase, before default-resources
+                 copies this project's resources in the process-resources phase. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-licenses-and-keystore</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.alfresco</groupId>
+                                    <artifactId>alfresco-community-repo-distribution</artifactId>
+                                    <type>jar</type>
+                                    <outputDirectory>${project.build.directory}/classes</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>extract-share-distribution</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.alfresco</groupId>
+                                    <artifactId>alfresco-content-services-share-distribution</artifactId>
+                                    <type>zip</type>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>extract-jlan-dll</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.alfresco</groupId>
+                                    <artifactId>alfresco-jlan-embed</artifactId>
+                                    <classifier>windll</classifier>
+                                    <includes>*.dll</includes>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+
+                    <!-- Copy ROOT.war -->
+                    <!-- This plugin <execution> must be before the "make-assembly" as it is in the same phase -->
+                    <execution>
+                        <id>copy-resources-war</id>
+                        <!-- We want the wars in the zip but not the package's jar. -->
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.alfresco</groupId>
+                                    <artifactId>alfresco-server-root</artifactId>
+                                    <type>war</type>
+                                    <outputDirectory>${project.build.outputDirectory}/web-server/webapps</outputDirectory>
+                                    <destFileName>ROOT.war</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.alfresco.aos-module</groupId>
+                                    <artifactId>alfresco-vti-bin</artifactId>
+                                    <type>war</type>
+                                    <outputDirectory>${project.build.outputDirectory}/web-server/webapps</outputDirectory>
+                                    <destFileName>_vti_bin.war</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+
+                    <!-- Copy alfresco.war -->
+                    <execution>
+                        <id>copy-alfresco-war</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.alfresco</groupId>
+                                    <artifactId>content-services-community</artifactId>
+                                    <version>${dependency.alfresco-community-repo.version}</version>
+                                    <type>war</type>
+                                    <overWrite>false</overWrite>
+                                    <outputDirectory>${project.build.directory}</outputDirectory>
+                                    <destFileName>alfresco.war</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <descriptors>
+                                <descriptor>src/assembly/distribution.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

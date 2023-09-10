@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.alfresco.tas</groupId>
+    <artifactId>content-repository-community-cmis-test</artifactId>
+    <name>content-repository-community-cmis-test</name>
+    <packaging>jar</packaging>
+
+    <parent>
+        <groupId>org.alfresco</groupId>
+        <artifactId>content-repository-community-tests</artifactId>
+        <version>23.1.0-A28-SNAPSHOT</version>
+    </parent>
+
+    <developers>
+        <developer>
+            <name>Paul Brodner</name>
+            <roles>
+                <role>Test Automation Architect</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <properties>
+        <suiteXmlFile>${project.basedir}/src/test/resources/cmis-suite.xml</suiteXmlFile>
+        <cmis.binding>browser</cmis.binding>
+        <cmis.basePath>/alfresco/api/-default-/public/cmis/versions/1.1/browser</cmis.basePath>
+        <excludedGroups />
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>run-cmis-browser</id>
+            <properties>
+                <excludedGroups>not_supported_on_cmis_browser|renditions|bug-browser.*</excludedGroups>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>run-cmis-webservices</id>
+            <properties>
+                <cmis.binding>webservices</cmis.binding>
+                <cmis.basePath>/alfresco/cmisws/cmis?wsdl</cmis.basePath>
+                <excludedGroups>not_supported_on_cmis_ws|renditions|bug-ws.*</excludedGroups>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>run-cmis-atom</id>
+            <properties>
+                <cmis.binding>atom</cmis.binding>
+                <cmis.basePath>/alfresco/api/-default-/public/cmis/versions/1.1/atom</cmis.basePath>
+                <excludedGroups>not_supported_on_cmis_atom|renditions|bug-atom.*</excludedGroups>
+            </properties>
+        </profile>
+    </profiles>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.alfresco.tas</groupId>
+            <artifactId>cmis</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.alfresco.tas</groupId>
+            <artifactId>cmis</artifactId>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>${suiteXmlFile}</suiteXmlFile>
+                    </suiteXmlFiles>
+                    <systemProperties>
+                        <cmis.binding>${cmis.binding}</cmis.binding>
+                        <cmis.basePath>${cmis.basePath}</cmis.basePath>
+                    </systemProperties>
+                    <argLine>
+                        --illegal-access=warn
+                    </argLine>
+                </configuration>
+            </plugin>
+            <!-- Build only test jar -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
