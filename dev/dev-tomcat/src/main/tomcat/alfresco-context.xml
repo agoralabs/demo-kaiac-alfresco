@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Context>
-  <Resources cachingAllowed="true" cacheMaxSize="102400">
-    <PostResources className="org.apache.catalina.webresources.DirResourceSet"
-                   base="${catalina.home}/shared/classes"
-                   webAppMount="/WEB-INF/classes"/>
-  </Resources>
-</Context>
