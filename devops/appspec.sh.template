@@ -11,7 +11,10 @@ then
 
     aws ecr get-login-password --region $TF_VAR_ENV_APP_GL_AWS_REGION_ECR | docker login --username AWS --password-stdin $TF_VAR_ENV_APP_GL_AWS_ACCOUNT_ID.dkr.ecr.$TF_VAR_ENV_APP_GL_AWS_REGION_ECR.amazonaws.com
 
-    docker build -t alfresco/alfresco-content-repository-community:latest $source_folder
+    #docker build -t alfresco/alfresco-content-repository-community:latest $source_folder
+
+    chmod +x ./mvnw
+    ./mvnw clean install -DskipTests -P build-docker-images
 
     docker compose -f $source_folder/docker-compose.yml up -d
 

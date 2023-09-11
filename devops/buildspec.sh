@@ -79,8 +79,3 @@ then
     kubectl apply -f app-service.yaml -n ${TF_VAR_ENV_APP_BE_KUBERNETES_NAMESPACE}
 
 fi
-
-
-
-chmod +x ./mvnw
-./mvnw clean install -DskipTests -P build-docker-images
