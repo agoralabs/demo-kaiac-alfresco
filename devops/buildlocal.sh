@@ -19,11 +19,4 @@ do
     appenvsubstr $template $source_folder/$generated
 done
 
-#For spring boot only
-mvnw_file=$source_folder/mvnw
-if [ -f "$mvnw_file" ]
-then
-    chmod 777 $mvnw_file
-    log_msg "Build alfresco app with $mvnw_file..."
-    $mvnw_file clean install -DskipTests -f $source_folder/pom.xml -P build-docker-images
-fi
+docker compose -f $source_folder/docker-compose.yml up -d
