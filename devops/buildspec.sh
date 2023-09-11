@@ -26,7 +26,9 @@ appenvsubstr(){
     | envsubst '$TF_VAR_ENV_APP_BE_SSL_CERT_ARN' \
     | envsubst '$TF_VAR_ENV_APP_GL_REPO_JDK_NAME' \
     | envsubst '$TF_VAR_ENV_APP_GL_REPO_JDK_TAG' \
-    | envsubst '$TF_VAR_ENV_APP_GL_AWS_REGION_ECR' > $p_destination
+    | envsubst '$TF_VAR_ENV_APP_GL_AWS_REGION_ECR' \
+    | envsubst '$TF_VAR_ENV_APP_BE_EXPOSED_PORT' \
+    | envsubst '$TF_VAR_ENV_APP_BE_EXPOSED_PROTOCOL' > $p_destination
 }
 
 appenvsubstr devops/appspec.yml.template appspec.yml

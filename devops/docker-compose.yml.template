@@ -36,12 +36,14 @@ services:
         -Dsolr.sharedSecret=secret
         -Dsolr.base.url=/solr
         -Dindex.subsystem.name=solr6
-        -Dshare.host=127.0.0.1
-        -Dshare.port=8080
-        -Dalfresco.host=localhost
-        -Dalfresco.port=8080
+        -Dshare.host=${TF_VAR_ENV_APP_BE_DOMAIN_NAME}
+        -Dshare.port=${TF_VAR_ENV_APP_BE_EXPOSED_PORT}
+        -Dshare.protocol=${TF_VAR_ENV_APP_BE_EXPOSED_PROTOCOL}
+        -Dalfresco.host=${TF_VAR_ENV_APP_BE_DOMAIN_NAME}
+        -Dalfresco.port=${TF_VAR_ENV_APP_BE_EXPOSED_PORT}
+        -Dalfresco.protocol=${TF_VAR_ENV_APP_BE_EXPOSED_PROTOCOL}
         -Dcsrf.filter.enabled=false
-        -Daos.baseUrlOverwrite=http://localhost:8080/alfresco/aos
+        -Daos.baseUrlOverwrite=${TF_VAR_ENV_APP_BE_EXPOSED_PROTOCOL}://${TF_VAR_ENV_APP_BE_DOMAIN_NAME}:${TF_VAR_ENV_APP_BE_EXPOSED_PORT}/alfresco/aos
         -Dmessaging.broker.url="failover:(nio://activemq:61616)?timeout=3000&jms.useCompression=true"
         -Ddeployment.method=DOCKER_COMPOSE
         -DlocalTransform.core-aio.url=http://transform-core-aio:8090/
@@ -92,10 +94,10 @@ services:
       # Create the default alfresco and archive cores
       SOLR_CREATE_ALFRESCO_DEFAULTS: "alfresco,archive"
       # HTTPS or SECRET
-      ALFRESCO_SECURE_COMMS: "secret"
+      ALFRESCO_SECURE_COMMS: "none"
       # SHARED SECRET VALUE
-      JAVA_TOOL_OPTIONS: >-
-        -Dalfresco.secureComms.secret=secret
+      #JAVA_TOOL_OPTIONS: >-
+      #  -Dalfresco.secureComms.secret=secret
     ports:
       - "8083:8983" # Browser port
   activemq:
