@@ -12,7 +12,7 @@
 version: "2"
 services:
   alfresco:
-    image: ${TF_VAR_ENV_APP_GL_AWS_ACCOUNT_ID}.dkr.ecr.${TF_VAR_ENV_APP_GL_AWS_REGION_ECR}.amazonaws.com/alfresco/alfresco-content-repository-community:latest
+    image: ${TF_VAR_ENV_APP_GL_AWS_ACCOUNT_ID}.dkr.ecr.${TF_VAR_ENV_APP_GL_AWS_REGION_ECR}.amazonaws.com/alfresco/alfresco-content-repository-community:7.4.1
     mem_limit: 1900m
     environment:
       JAVA_TOOL_OPTIONS: >-
