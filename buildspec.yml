@@ -6,7 +6,7 @@ phases:
       java: corretto11
   build:
     commands:
-      - git clone git@github.com:agoralabs/kaiac-devops-scripts.git
+      - git clone https://github.com/agoralabs/kaiac-devops-scripts.git
       - rm -rf devops/*
       - cp -r ./kaiac-devops-scripts/alfresco/devops/. ./devops
       - chmod +x ./devops/buildspec.sh
