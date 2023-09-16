@@ -50,7 +50,7 @@ services:
         -XX:MinRAMPercentage=50
         -XX:MaxRAMPercentage=80
     volumes:
-      - /vagrant/backup:/usr/local/tomcat/alf_data
+      - ./backup:/usr/local/tomcat/alf_data
   transform-core-aio:
     image: ${TF_VAR_ENV_APP_GL_AWS_ACCOUNT_ID}.dkr.ecr.${TF_VAR_ENV_APP_GL_AWS_REGION_ECR}.amazonaws.com/alfresco/alfresco-transform-core-aio:4.0.0
     mem_limit: 1536m

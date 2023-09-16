@@ -4,9 +4,6 @@ SCRIPT_MODE="$TF_VAR_ENV_APP_GL_SCRIPT_MODE"
 
 source_folder=$TF_VAR_ENV_APP_BE_LOCAL_SOURCE_FOLDER
 
-mkdir -p /vagrant/backup
-chmod +x /vagrant/backup
-
 if [ "$SCRIPT_MODE" == "CLOUDOCKER" ]
 then
 
