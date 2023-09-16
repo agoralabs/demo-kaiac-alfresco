@@ -17,8 +17,5 @@ then
 
     docker compose -f $source_folder/docker-compose.yml up -d
 
-    chown -R 33000 ./data/alf-repo-data
-
-    docker ps -a | grep -v CONTAINER | awk '{ print $1 }' | xargs docker restart
 
 fi
