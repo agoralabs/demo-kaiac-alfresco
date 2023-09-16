@@ -6,6 +6,7 @@ source_folder=$TF_VAR_ENV_APP_BE_LOCAL_SOURCE_FOLDER
 
 mkdir -p ./data/alf-repo-data
 chmod 777 ./data/alf-repo-data
+chown -R 33000 ./data/alf-repo-data
 
 if [ "$SCRIPT_MODE" == "CLOUDOCKER" ]
 then
