@@ -24,14 +24,15 @@ then
         echo "Backup File does not exist."
     else
         echo "Backup File do exist."
-        #aws s3 cp s3://kaiac.agoralabs.org/alf_data.zip .
+        aws s3 cp s3://kaiac.agoralabs.org/alf_data.zip .
 
-        #cd /vagrant/demo-kaiac-alfresco/data/alf-repo-data
+        cd /vagrant/demo-kaiac-alfresco/data/alf-repo-data
 
-        #rm -rf *
+        rm -rf *
 
-        #unzip -qq $current_folder/alf_data.zip
+        unzip -qq $current_folder/alf_data.zip
         chown -R 33000 $current_folder/data/alf-repo-data
+        
         #docker ps -a | grep -v CONTAINER | awk '{ print $1 }' | xargs docker stop
         #docker ps -a | grep -v CONTAINER | awk '{ print $1 }' | xargs docker start
 
