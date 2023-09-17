@@ -32,8 +32,7 @@ then
 
         unzip -qq $current_folder/alf_data.zip
         chown -R 33000 $current_folder/data/alf-repo-data
-        docker compose -f $source_folder/docker-compose.yml up -d
-        chown -R 33000 $current_folder/data/alf-repo-data
+        docker compose -f $source_folder/docker-compose.yml up --build --force-recreate
         #docker ps -a | grep -v CONTAINER | awk '{ print $1 }' | xargs docker stop
         #docker ps -a | grep -v CONTAINER | awk '{ print $1 }' | xargs docker start
 
