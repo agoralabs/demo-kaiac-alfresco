@@ -4,38 +4,14 @@ SCRIPT_MODE="$TF_VAR_ENV_APP_GL_SCRIPT_MODE"
 
 source_folder=$TF_VAR_ENV_APP_BE_LOCAL_SOURCE_FOLDER
 
-mkdir -p ./data/alf-repo-data
-chmod 777 ./data/alf-repo-data
-current_folder=$PWD
-
 if [ "$SCRIPT_MODE" == "CLOUDOCKER" ]
 then
 
-    docker ps -a | grep -v CONTAINER | awk '{ print $1 }' | xargs docker stop
-    docker ps -a | grep -v CONTAINER | awk '{ print $1 }' | xargs docker rm
+    #docker ps -a | grep -v CONTAINER | awk '{ print $1 }' | xargs docker stop
+    #docker ps -a | grep -v CONTAINER | awk '{ print $1 }' | xargs docker rm
 
     aws ecr get-login-password --region $TF_VAR_ENV_APP_GL_AWS_REGION_ECR | docker login --username AWS --password-stdin $TF_VAR_ENV_APP_GL_AWS_ACCOUNT_ID.dkr.ecr.$TF_VAR_ENV_APP_GL_AWS_REGION_ECR.amazonaws.com
 
-    docker compose -f $source_folder/docker-compose.yml up -d
-
-    # get the files from S3
-    aws s3api head-object --bucket kaiac.agoralabs.org --key alf_data.zip || NOT_EXIST=true
-    if [ $NOT_EXIST ]; then
-        echo "Backup File does not exist."
-    else
-        echo "Backup File do exist."
-        aws s3 cp s3://kaiac.agoralabs.org/alf_data.zip .
-
-        cd /vagrant/demo-kaiac-alfresco/data/alf-repo-data
-
-        rm -rf *
-
-        unzip -qq $current_folder/alf_data.zip
-        chown -R 33000 $current_folder/data/alf-repo-data
-        docker compose -f $source_folder/docker-compose.yml up -d --build --force-recreate
-        #docker ps -a | grep -v CONTAINER | awk '{ print $1 }' | xargs docker stop
-        #docker ps -a | grep -v CONTAINER | awk '{ print $1 }' | xargs docker start
-
-    fi
+    docker compose -f $source_folder/docker-compose.yml up -d --force-recreate
 
 fi

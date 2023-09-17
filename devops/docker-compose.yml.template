@@ -49,8 +49,6 @@ services:
         -DlocalTransform.core-aio.url=http://transform-core-aio:8090/
         -XX:MinRAMPercentage=50
         -XX:MaxRAMPercentage=80
-    volumes:
-      - ./data/alf-repo-data:/usr/local/tomcat/alf_data
   transform-core-aio:
     image: ${TF_VAR_ENV_APP_GL_AWS_ACCOUNT_ID}.dkr.ecr.${TF_VAR_ENV_APP_GL_AWS_REGION_ECR}.amazonaws.com/alfresco/alfresco-transform-core-aio:4.0.0
     mem_limit: 1536m
@@ -100,6 +98,10 @@ services:
       # SHARED SECRET VALUE
       #JAVA_TOOL_OPTIONS: >-
       #  -Dalfresco.secureComms.secret=secret
+    volumes:
+        - ./data/solr-data:/opt/alfresco-search-services/data
+        - ./backup/solr/alfresco:/opt/alfresco-search-services/backup/alfresco
+        - ./backup/solr/archive:/opt/alfresco-search-services/backup/archive
     ports:
       - "8083:8983" # Browser port
   activemq:
