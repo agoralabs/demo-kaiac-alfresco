@@ -97,6 +97,7 @@ services:
       ALFRESCO_SECURE_COMMS: "secret"
       # SHARED SECRET VALUE
       JAVA_TOOL_OPTIONS: >-
+        -Dalfresco.secureComms=secret
         -Dalfresco.secureComms.secret=secret
     volumes:
         - ./data/solr-data:/opt/alfresco-search-services/data
