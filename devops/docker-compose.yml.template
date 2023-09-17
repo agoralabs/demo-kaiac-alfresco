@@ -94,7 +94,7 @@ services:
       # Create the default alfresco and archive cores
       SOLR_CREATE_ALFRESCO_DEFAULTS: "alfresco,archive"
       # HTTPS or SECRET
-      ALFRESCO_SECURE_COMMS: "none"
+      ALFRESCO_SECURE_COMMS: "secret"
       # SHARED SECRET VALUE
       JAVA_TOOL_OPTIONS: >-
         -Dalfresco.secureComms.secret=secret
