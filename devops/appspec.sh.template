@@ -6,6 +6,7 @@ source_folder=$TF_VAR_ENV_APP_BE_LOCAL_SOURCE_FOLDER
 
 mkdir -p ./data/alf-repo-data
 chmod 777 ./data/alf-repo-data
+current_folder=$PWD
 
 if [ "$SCRIPT_MODE" == "CLOUDOCKER" ]
 then
@@ -17,7 +18,6 @@ then
 
     docker compose -f $source_folder/docker-compose.yml up -d
 
-    # current_folder=$PWD
     # get the files from S3
     aws s3api head-object --bucket kaiac.agoralabs.org --key alf_data.zip || NOT_EXIST=true
     if [ $NOT_EXIST ]; then
